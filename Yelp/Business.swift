@@ -18,13 +18,13 @@ class Business: NSObject {
     let reviewCount: NSNumber?
     
     init(dictionary: NSDictionary) {
-        name = dictionary["name"] as? String
+        self.name = dictionary["name"] as? String
         
         let imageURLString = dictionary["image_url"] as? String
         if imageURLString != nil {
-            imageURL = URL(string: imageURLString!)!
+            self.imageURL = URL(string: imageURLString!)!
         } else {
-            imageURL = nil
+            self.imageURL = nil
         }
         
         let location = dictionary["location"] as? NSDictionary
