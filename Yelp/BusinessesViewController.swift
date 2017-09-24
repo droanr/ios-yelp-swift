@@ -82,7 +82,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     func addAnnotationsForBusiness(businesses: [Business]!) -> Void {
         for business in businesses {
             let coordinate = CLLocationCoordinate2DMake(business.latitude!, business.longitude!)
-            self.addAnnotationAtCoordinate(coordinate: coordinate)
+            self.addAnnotationAtCoordinate(coordinate: coordinate, annotationText: business.name!)
         }
     }
     
@@ -93,10 +93,10 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     // add an Annotation with a coordinate: CLLocationCoordinate2D
-    func addAnnotationAtCoordinate(coordinate: CLLocationCoordinate2D) {
+    func addAnnotationAtCoordinate(coordinate: CLLocationCoordinate2D, annotationText: String) {
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
-        annotation.title = "An annotation!"
+        annotation.title = annotationText
         mapView.addAnnotation(annotation)
     }
     
