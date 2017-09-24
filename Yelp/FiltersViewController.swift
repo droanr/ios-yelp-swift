@@ -9,7 +9,7 @@
 import UIKit
 
 @objc protocol FiltersViewControllerDelegate {
-    @objc optional func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject], selectedCategories: [Int:Bool], deals: Bool, distanceSelected: String, sortSelected: Int)
+    @objc optional func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject], selectedCategories: [Int:Bool], deals: Bool, distanceSelected: String, sortSelected: Int)
 }
 
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
@@ -73,7 +73,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             self.sortSelected = -1
         }
         
-        delegate?.filtersViwController?(filtersViewController: self, didUpdateFilters: filters, selectedCategories: self.switchStates, deals: self.dealSelected!, distanceSelected: self.distanceSelected!, sortSelected: self.sortSelected!)
+        delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters, selectedCategories: self.switchStates, deals: self.dealSelected!, distanceSelected: self.distanceSelected!, sortSelected: self.sortSelected!)
         dismiss(animated: true, completion: nil)
     }
 

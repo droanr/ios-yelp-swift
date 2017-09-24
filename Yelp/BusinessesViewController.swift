@@ -100,7 +100,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         filtersViewController.sortSelected = self.sortSelected
     }
     
-    func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], selectedCategories:[Int:Bool], deals:Bool, distanceSelected:String?, sortSelected:Int) {
+    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], selectedCategories:[Int:Bool], deals:Bool, distanceSelected:String?, sortSelected:Int) {
         let categories = filters["categories"] as? [String]
         self.selectedCategories = selectedCategories
         self.dealSelected = deals
