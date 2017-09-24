@@ -79,6 +79,10 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
     func addAnnotationsForBusiness(businesses: [Business]!) -> Void {
         for business in businesses {
             let coordinate = CLLocationCoordinate2DMake(business.latitude!, business.longitude!)

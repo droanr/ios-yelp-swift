@@ -1,4 +1,4 @@
-//
+    //
 //  FiltersViewController.swift
 //  Yelp
 //
@@ -26,6 +26,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     var distanceSelected: String!
     var sortSelected: Int!
     var switchStates = [Int:Bool]()
+    var isDistanceMenuShowing = false
+    var isSortMenuShowing = false
     weak var delegate: FiltersViewControllerDelegate!
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -50,6 +52,20 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         filtersTableView.dataSource = self
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.row == 0 && indexPath.section == 1 {
+            if isDistanceMenuShowing {
+                isDistanceMenuShowing = false
+                filtersTableView.reloadData()
+                //toggleOtherRowsInSection(row: indexPath.row, section: indexPath.section, value: false)
+            } else {
+                isDistanceMenuShowing = true
+                filtersTableView.reloadData()
+                //toggleOtherRowsInSection(row: indexPath.row, section: indexPath.section, value: true)
+            }
+        }
+    }
     
     @IBAction func onSearch(_ sender: Any) {
         var filters = [String: AnyObject]()
@@ -82,7 +98,16 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allFilters[section].count
+        switch(section) {
+        case 1:
+            if !isDistanceMenuShowing {
+                return 1
+            } else {
+                return allFilters[section].count
+            }
+        default:
+            return allFilters[section].count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -93,16 +118,32 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         case 0:
             cell.switchLabel.text = filters[indexPath.row].name
             cell.onSwitch.isOn = dealSelected
-        
+            
         case 1:
             cell.switchLabel.text = filters[indexPath.row].name
+            if indexPath.row == 0 {
+                cell.onSwitch.isHidden = true
+                if self.distanceSelected != nil && self.distanceSelected != "" {
+                    cell.switchLabel.text = Filter.getNameForCode(filters: filters, code: self.distanceSelected)
+                }
+                break
+            }
             if self.distanceSelected != nil && self.distanceFilters[indexPath.row].code as! String == self.distanceSelected {
                 cell.onSwitch.isOn = true
+                self.updateFirstRowText(section: indexPath.section, text: self.distanceFilters[indexPath.row].name)
+
             } else {
                 cell.onSwitch.isOn = false
             }
         case 2:
             cell.switchLabel.text = filters[indexPath.row].name
+            /*if indexPath.row == 0 {
+                cell.onSwitch.isHidden = true
+                if self.sortSelected != nil && self.distanceSelected != "" {
+                    cell.switchLabel.text = Filter.getNameForCode(filters: filters, code: self.sortSelected)
+                }
+                break
+            }*/
             let sortMode = self.sortFilters[indexPath.row].code as! YelpSortMode
             if self.sortSelected != nil && sortMode.rawValue == self.sortSelected {
                 cell.onSwitch.isOn = true
@@ -112,7 +153,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         case 3:
             cell.switchLabel.text = filters[indexPath.row].name
             cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
-            
+            cell.onSwitch.isHidden = false
         default:
             cell.switchLabel.text = "foo"
             cell.onSwitch.isOn = false
@@ -124,7 +165,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         switch(section) {
         case 0:
             return ""
-            
         case 1:
             return "Distance"
         
@@ -144,10 +184,9 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         header.textLabel?.textColor = UIColor.black
     }
 
-
     func tableView (tableView:UITableView , heightForHeaderInSection section:Int)->Float
     {
-        return 10.0
+        return 8.0
     }
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
@@ -157,10 +196,16 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else if indexPath.section == 1 {
             if value == true {
                 self.distanceSelected = distanceFilters[indexPath.row].code as! String
+                updateFirstRowText(section: indexPath.section, text: distanceFilters[indexPath.row].name as! String)
                 disableOtherRowsInSection(row: indexPath.row, section:indexPath.section)
+                //toggleOtherRowsInSection(row: 0, section: indexPath.section, value: false)
             } else {
                 self.distanceSelected = ""
+                updateFirstRowText(section: indexPath.section, text: distanceFilters[0].name as! String)
+                //toggleOtherRowsInSection(row: 0, section: indexPath.section, value: false)
             }
+            isDistanceMenuShowing = false
+            filtersTableView.reloadData()
         } else if indexPath.section == 2 {
             if value == true {
                 let sortMode = self.sortFilters[indexPath.row].code as! YelpSortMode
@@ -178,15 +223,37 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func disableOtherRowsInSection(row: Int!, section:Int!) {
-        let total = stride(from: 0, to:self.allFilters[section].count, by:1)
+        let total = stride(from: 1, to:self.allFilters[section].count, by:1)
         var rowsToDisable = Array(Set(Array(total)).subtracting(Set([row])))
         for row in rowsToDisable {
             var cell = filtersTableView.cellForRow(at: IndexPath(row:row, section:section)) as? SwitchCell
             if cell != nil {
                 cell?.onSwitch.isOn = false
+                //cell?.isHidden = false
             }
-            
         }
+    }
+    
+    func toggleOtherRowsInSection(row: Int!, section:Int, value: Bool!) {
+        let total = stride(from: 1, to:self.allFilters[section].count, by:1)
+        var rowsToDisable = Array(Set(Array(total)).subtracting(Set([row])))
+        for row in rowsToDisable {
+            var cell = filtersTableView.cellForRow(at: IndexPath(row:row, section:section)) as? SwitchCell
+            if cell != nil {
+                /*
+                if value {
+                   cell?.frame.size.height = 80
+                } else{
+                    cell?.frame.size.height = 0
+                }*/
+                cell?.isHidden = !value
+            }
+        }
+    }
+    
+    func updateFirstRowText(section:Int!, text: String!) {
+        var cell = filtersTableView.cellForRow(at: IndexPath(row:0, section:section)) as? SwitchCell
+        cell?.switchLabel.text = text
     }
     
 }

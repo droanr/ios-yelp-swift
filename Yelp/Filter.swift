@@ -47,8 +47,18 @@ class Filter: NSObject {
         return ret
     }
     
+    class func getNameForCode(filters: [Filter], code: String) -> String {
+        for filter in filters {
+            if filter.code as! String == code {
+                return filter.name as! String
+            }
+        }
+        return ""
+    }
+    
     class func distanceFilters() -> [NSDictionary] {
-        return [["name": "0.3 miles", "code": "482.803"],
+        return [["name": "Auto", "code": "placeholder"],
+                ["name": "0.3 miles", "code": "482.803"],
                 ["name": "1 mile", "code": "1609.34"],
                 ["name": "5 miles", "code": "8046.72"],
                 ["name": "20 miles", "code": "32186.9"]]
