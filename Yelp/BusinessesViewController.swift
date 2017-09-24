@@ -12,6 +12,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBOutlet weak var tableView: UITableView!
     var businesses: [Business]!
+    var selectedCategories: [Int:Bool]!
+    
     var searchBar = UISearchBar()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
+        
+        self.selectedCategories = [Int:Bool]()
         
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
@@ -81,10 +85,12 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         let navigationController = segue.destination as! UINavigationController
         let filtersViewController = navigationController.topViewController as! FiltersViewController
         filtersViewController.delegate = self
+        filtersViewController.switchStates = selectedCategories
     }
     
-    func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
+    func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], selectedCategories:[Int:Bool]) {
         let categories = filters["categories"] as? [String]
+        self.selectedCategories = selectedCategories
         Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil) { (businesses: [Business]!, error: Error!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
