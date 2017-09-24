@@ -9,17 +9,24 @@
 import UIKit
 
 @objc protocol FiltersViewControllerDelegate {
-    @objc optional func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject], selectedCategories: [Int:Bool])
+    @objc optional func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject], selectedCategories: [Int:Bool], deals: Bool)
 }
 
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
 
     @IBOutlet weak var filtersTableView: UITableView!
     
+    var allFilters: [[Filter]]!
     var categories: [Filter]!
+    var dealFilter: [Filter]!
+    
+    var dealSelected: Bool!
     var switchStates = [Int:Bool]()
     weak var delegate: FiltersViewControllerDelegate!
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return allFilters.count
+    }
     
     @IBAction func onCancel(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -27,6 +34,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         categories = Filter.getCategoryFilters()
+        dealFilter = Filter.getDealFilter()
+        allFilters = [[Filter]]()
+        allFilters.append(dealFilter)
+        allFilters.append(categories)
         filtersTableView.delegate = self
         filtersTableView.dataSource = self
     }
@@ -35,9 +46,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBAction func onSearch(_ sender: Any) {
         var filters = [String: AnyObject]()
         var selectedCategories = [String]()
+        
         for (row, isSelected) in switchStates {
             if isSelected {
-                selectedCategories.append(categories[row].code!)
+                selectedCategories.append(categories[row].code as! String)
             }
         }
         
@@ -45,7 +57,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             filters["categories"] = selectedCategories as AnyObject
         }
         
-        delegate?.filtersViwController?(filtersViewController: self, didUpdateFilters: filters, selectedCategories: self.switchStates)
+        delegate?.filtersViwController?(filtersViewController: self, didUpdateFilters: filters, selectedCategories: self.switchStates, deals: self.dealSelected!)
         dismiss(animated: true, completion: nil)
     }
 
@@ -54,21 +66,54 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories!.count
+        return allFilters[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
-        
-        cell.switchLabel.text = categories[indexPath.row].name
-        cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
+        var filters = allFilters[indexPath.section]
         cell.delegate = self
+        switch(indexPath.section) {
+        case 0:
+            cell.switchLabel.text = filters[indexPath.row].name
+            cell.onSwitch.isOn = dealSelected
+        
+        case 1:
+            cell.switchLabel.text = filters[indexPath.row].name
+            cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
+            
+        default:
+            cell.switchLabel.text = "foo"
+            cell.onSwitch.isOn = false
+        }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch(section) {
+        case 0:
+            return ""
+            
+        case 1:
+            return "Categories"
+            
+        default :return ""
+            
+        }
+    }
+
+    func tableView (tableView:UITableView , heightForHeaderInSection section:Int)->Float
+    {
+        return 10.0
     }
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
         let indexPath = filtersTableView.indexPath(for: switchCell)!
-        switchStates[indexPath.row] = value
+        if indexPath.section == 0 {
+            self.dealSelected = value
+        } else if indexPath.section == 1 {
+            switchStates[indexPath.row] = value
+        }
         print("Filters view controller got the switch event")
         
     }

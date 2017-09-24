@@ -13,6 +13,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var tableView: UITableView!
     var businesses: [Business]!
     var selectedCategories: [Int:Bool]!
+    var dealSelected: Bool!
     
     var searchBar = UISearchBar()
     override func viewDidLoad() {
@@ -28,6 +29,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.estimatedRowHeight = 120
         
         self.selectedCategories = [Int:Bool]()
+        self.dealSelected = false
         
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
@@ -86,12 +88,14 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         let filtersViewController = navigationController.topViewController as! FiltersViewController
         filtersViewController.delegate = self
         filtersViewController.switchStates = selectedCategories
+        filtersViewController.dealSelected = dealSelected
     }
     
-    func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], selectedCategories:[Int:Bool]) {
+    func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], selectedCategories:[Int:Bool], deals:Bool) {
         let categories = filters["categories"] as? [String]
         self.selectedCategories = selectedCategories
-        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil) { (businesses: [Business]!, error: Error!) -> Void in
+        self.dealSelected = deals
+        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: deals) { (businesses: [Business]!, error: Error!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }

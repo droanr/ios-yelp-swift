@@ -9,23 +9,35 @@
 import UIKit
 
 class Filter: NSObject {
-    var name: String!
-    var code: String!
+    var name: String?
+    var code: Any?
     
     init(dict: NSDictionary) {
-        self.name = dict["name"] as! String
-        self.code = dict["code"] as! String
+        self.name = dict["name"] as? String
+        self.code = dict["code"]
     }
     
     class func getCategoryFilters() -> [Filter] {
         var returnVal = [Filter]()
         for category in self.yelpCategories() {
-            returnVal.append(Filter(dict: category as NSDictionary))
+            returnVal.append(Filter(dict: category))
         }
         return returnVal
     }
     
-    class func yelpCategories() -> [[String:String]] {
+    class func getDealFilter() -> [Filter] {
+        var ret = [Filter]()
+        ret.append(Filter(dict: dealCategoryFilter()))
+        return ret
+    }
+    
+    
+    
+    class func dealCategoryFilter() -> NSDictionary {
+        return ["name": "Offering A Deal", "code": false]
+    }
+    
+    class func yelpCategories() -> [NSDictionary] {
         return [["name" : "Afghan", "code": "afghani"],
                 ["name" : "African", "code": "african"],
                 ["name" : "American, New", "code": "newamerican"],
