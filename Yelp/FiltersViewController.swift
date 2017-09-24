@@ -128,6 +128,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else if indexPath.section == 1 {
             if value == true {
                 self.distanceSelected = distanceFilters[indexPath.row].code as! String
+                disableOtherRowsInSection(row: indexPath.row, section:indexPath.section)
             } else {
                 self.distanceSelected = ""
             }
@@ -136,6 +137,14 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         print("Filters view controller got the switch event")
         
+    }
+    
+    func disableOtherRowsInSection(row: Int!, section:Int!) {
+        var rowsToDisable = Array(Set([0,1,2,3]).subtracting(Set([row])))
+        for row in rowsToDisable {
+            var cell = filtersTableView.cellForRow(at: IndexPath(row:row, section:section)) as! SwitchCell
+            cell.onSwitch.isOn = false
+        }
     }
     
 }
