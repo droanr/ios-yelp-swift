@@ -16,7 +16,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     var dealSelected: Bool!
     var distanceSelected: String!
     var sortSelected: Int!
-    
+    var isMoreDataLoading = false
     var searchBar = UISearchBar()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +65,38 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    func getSelectedCategories() -> [String] {
+        var ret = [String]()
+        for (index, item) in Filter.getCategoryFilters().enumerated() {
+            if self.selectedCategories[index] == true {
+                ret.append(item.code as! String)
+            }
+        }
+        return ret
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = self.tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - self.tableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && self.tableView.isDragging) {
+                isMoreDataLoading = true
+                let offset = self.businesses?.count
+                if offset != nil && offset! % 20 != 0 {
+                    return
+                }
+                Business.searchWithTerm(term: "Restaurants", sort: self.sortSelected, categories: getSelectedCategories(), deals: self.dealSelected, distance: self.distanceSelected, offset: offset) { (businesses: [Business]!, error: Error!) -> Void in
+                    self.businesses = self.businesses + businesses
+                    self.tableView.reloadData()
+                    self.isMoreDataLoading = false
+                }
+            }
+        }
+    }
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         Business.searchWithTerm(term: searchText) {(businesses: [Business]!, error: Error!) -> Void in
             self.businesses = businesses
@@ -106,7 +138,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         self.dealSelected = deals
         self.distanceSelected = distanceSelected
         self.sortSelected = sortSelected
-        Business.searchWithTerm(term: "Restaurants", sort: sortSelected, categories: categories, deals: deals, distance: distanceSelected) { (businesses: [Business]!, error: Error!) -> Void in
+        Business.searchWithTerm(term: "Restaurants", sort: sortSelected, categories: categories, deals: deals, distance: distanceSelected, offset: nil) { (businesses: [Business]!, error: Error!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }

@@ -21,7 +21,7 @@ Filter page. Unfortunately, not all the filters are supported in the Yelp API.
 The following **optional** features are implemented:
 
 Search results page
-- [ ] Infinite scroll for restaurant results.
+- [x] Infinite scroll for restaurant results.
 - [ ] Implement map view of restaurant results.
 
 Filter page
