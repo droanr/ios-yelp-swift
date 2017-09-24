@@ -48,6 +48,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         self.selectedCategories = [Int:Bool]()
         self.dealSelected = false
+        self.sortSelected = 0
         
         Business.searchWithTerm(term: "Restaurants", completion: { (businesses: [Business]?, error: Error?) -> Void in
             

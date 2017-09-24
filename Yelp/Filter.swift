@@ -47,10 +47,20 @@ class Filter: NSObject {
         return ret
     }
     
-    class func getNameForCode(filters: [Filter], code: String) -> String {
+    class func getNameForCode(filters: [Filter], code: Any?) -> String {
         for filter in filters {
-            if filter.code as! String == code {
-                return filter.name as! String
+            if filter.code as? String == code as? String {
+                return filter.name!
+            }
+        }
+        return ""
+    }
+    
+    class func getNameForSortVal(filters:[Filter], code:Int?) -> String {
+        for filter in filters {
+            let filCode = filter.code as! YelpSortMode
+            if filCode.rawValue == code {
+                return filter.name!
             }
         }
         return ""
@@ -70,6 +80,7 @@ class Filter: NSObject {
     
     class func sortFilter() -> [NSDictionary] {
         return [["name": "Best Match", "code": YelpSortMode.bestMatched],
+                ["name": "Best Match", "code": YelpSortMode.bestMatched],
                 ["name": "Distance", "code": YelpSortMode.distance],
                 ["name": "Highest Rated", "code": YelpSortMode.highestRated]]
     }
