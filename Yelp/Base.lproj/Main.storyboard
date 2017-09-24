@@ -119,12 +119,19 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="f4l-jf-LtL">
+                                <rect key="frame" x="0.0" y="64" width="414" height="672"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="f4l-jf-LtL" secondAttribute="trailing" id="4nQ-Ee-R2V"/>
+                            <constraint firstItem="f4l-jf-LtL" firstAttribute="top" secondItem="hR0-74-jRp" secondAttribute="bottom" id="DGF-on-4bA"/>
+                            <constraint firstItem="VBY-gq-v8E" firstAttribute="top" secondItem="f4l-jf-LtL" secondAttribute="bottom" id="M3x-m3-cy9"/>
                             <constraint firstItem="OVK-HG-q3U" firstAttribute="top" secondItem="XhR-oz-92f" secondAttribute="top" id="NOB-YF-cfj"/>
                             <constraint firstAttribute="trailing" secondItem="OVK-HG-q3U" secondAttribute="trailing" id="Sk6-5V-FTe"/>
                             <constraint firstItem="VBY-gq-v8E" firstAttribute="top" secondItem="OVK-HG-q3U" secondAttribute="bottom" id="bFO-Wi-PXz"/>
+                            <constraint firstItem="f4l-jf-LtL" firstAttribute="leading" secondItem="XhR-oz-92f" secondAttribute="leading" id="cAG-zd-A6k"/>
                             <constraint firstItem="OVK-HG-q3U" firstAttribute="leading" secondItem="XhR-oz-92f" secondAttribute="leading" id="qqy-Pe-e28"/>
                         </constraints>
                     </view>
@@ -137,6 +144,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="mapView" destination="f4l-jf-LtL" id="edM-Mr-EKY"/>
                         <outlet property="tableView" destination="OVK-HG-q3U" id="3G6-8h-JD6"/>
                     </connections>
                 </viewController>
