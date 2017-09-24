@@ -24,7 +24,12 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         self.searchBar.sizeToFit()
         self.searchBar.delegate = self
         navigationItem.titleView = self.searchBar
-        
+        /*
+        var filtersButton = navigationItem.rightBarButtonItem as! UIButton
+        filtersButton.layer.borderColor = UIColor.white as! CGColor
+        filtersButton.layer.borderWidth = 1.0
+        filtersButton.layer.cornerRadius = 5
+        */
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension

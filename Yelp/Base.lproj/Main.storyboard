@@ -129,7 +129,8 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Yelp" id="hrR-dO-cnY">
-                        <barButtonItem key="leftBarButtonItem" title="Filters" id="3eW-63-RIF">
+                        <barButtonItem key="leftBarButtonItem" title="Filter" id="3eW-63-RIF">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <segue destination="IKg-yD-kIU" kind="modal" id="vwM-p0-T4M"/>
                             </connections>
@@ -160,7 +161,7 @@
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="80" id="ObJ-aR-BCy" customClass="SwitchCell" customModule="Yelp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.5" width="414" height="80"/>
+                                        <rect key="frame" x="0.0" y="55.333333333333336" width="414" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ObJ-aR-BCy" id="TaB-o4-3f9">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
@@ -174,6 +175,7 @@
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gQp-wM-9nJ">
                                                     <rect key="frame" x="349" y="25" width="51" height="31"/>
+                                                    <color key="onTintColor" red="0.97155016660690308" green="0.15801054239273071" blue="0.15885227918624878" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <connections>
                                                         <action selector="onValueChange:" destination="ObJ-aR-BCy" eventType="valueChanged" id="VWw-IS-42p"/>
                                                     </connections>
@@ -228,9 +230,12 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="i0q-ac-ZJV" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="MH0-VP-cXY">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="MH0-VP-cXY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" red="1" green="0.01955882475484072" blue="0.028921036256511323" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" red="0.97575765849999996" green="0.017647113650000001" blue="0.022955408319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -246,9 +251,14 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="IKg-yD-kIU" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ffv-SQ-9LP">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Ffv-SQ-9LP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" red="0.97575765849999996" green="0.017647113650000001" blue="0.022955408319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
