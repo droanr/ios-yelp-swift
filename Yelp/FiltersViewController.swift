@@ -9,7 +9,7 @@
 import UIKit
 
 @objc protocol FiltersViewControllerDelegate {
-    @objc optional func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject], selectedCategories: [Int:Bool], deals: Bool)
+    @objc optional func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject], selectedCategories: [Int:Bool], deals: Bool, distanceSelected: String)
 }
 
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
@@ -19,8 +19,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     var allFilters: [[Filter]]!
     var categories: [Filter]!
     var dealFilter: [Filter]!
+    var distanceFilters: [Filter]!
     
     var dealSelected: Bool!
+    var distanceSelected: String!
     var switchStates = [Int:Bool]()
     weak var delegate: FiltersViewControllerDelegate!
     
@@ -35,8 +37,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         categories = Filter.getCategoryFilters()
         dealFilter = Filter.getDealFilter()
+        distanceFilters = Filter.getDistanceFilters()
         allFilters = [[Filter]]()
         allFilters.append(dealFilter)
+        allFilters.append(distanceFilters)
         allFilters.append(categories)
         filtersTableView.delegate = self
         filtersTableView.dataSource = self
@@ -57,7 +61,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             filters["categories"] = selectedCategories as AnyObject
         }
         
-        delegate?.filtersViwController?(filtersViewController: self, didUpdateFilters: filters, selectedCategories: self.switchStates, deals: self.dealSelected!)
+        delegate?.filtersViwController?(filtersViewController: self, didUpdateFilters: filters, selectedCategories: self.switchStates, deals: self.dealSelected!, distanceSelected: self.distanceSelected!)
         dismiss(animated: true, completion: nil)
     }
 
@@ -80,6 +84,13 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         case 1:
             cell.switchLabel.text = filters[indexPath.row].name
+            if self.distanceSelected != nil && self.distanceFilters[indexPath.row].code as! String == self.distanceSelected {
+                cell.onSwitch.isOn = true
+            } else {
+                cell.onSwitch.isOn = false
+            }
+        case 2:
+            cell.switchLabel.text = filters[indexPath.row].name
             cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
             
         default:
@@ -95,6 +106,9 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             return ""
             
         case 1:
+            return "Distance"
+        
+        case 2:
             return "Categories"
             
         default :return ""
@@ -112,6 +126,12 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         if indexPath.section == 0 {
             self.dealSelected = value
         } else if indexPath.section == 1 {
+            if value == true {
+                self.distanceSelected = distanceFilters[indexPath.row].code as! String
+            } else {
+                self.distanceSelected = ""
+            }
+        } else if indexPath.section == 2 {
             switchStates[indexPath.row] = value
         }
         print("Filters view controller got the switch event")

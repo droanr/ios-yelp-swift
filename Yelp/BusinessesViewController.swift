@@ -14,6 +14,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     var businesses: [Business]!
     var selectedCategories: [Int:Bool]!
     var dealSelected: Bool!
+    var distanceSelected: String!
     
     var searchBar = UISearchBar()
     override func viewDidLoad() {
@@ -31,7 +32,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         self.selectedCategories = [Int:Bool]()
         self.dealSelected = false
         
-        Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: "Restaurants", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
             self.tableView.reloadData()
@@ -89,13 +90,15 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         filtersViewController.delegate = self
         filtersViewController.switchStates = selectedCategories
         filtersViewController.dealSelected = dealSelected
+        filtersViewController.distanceSelected = distanceSelected
     }
     
-    func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], selectedCategories:[Int:Bool], deals:Bool) {
+    func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], selectedCategories:[Int:Bool], deals:Bool, distanceSelected:String) {
         let categories = filters["categories"] as? [String]
         self.selectedCategories = selectedCategories
         self.dealSelected = deals
-        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: deals) { (businesses: [Business]!, error: Error!) -> Void in
+        self.distanceSelected = distanceSelected
+        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: deals, distance: distanceSelected) { (businesses: [Business]!, error: Error!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }

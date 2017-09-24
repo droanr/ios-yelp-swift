@@ -25,13 +25,26 @@ class Filter: NSObject {
         return returnVal
     }
     
+    class func getDistanceFilters() -> [Filter] {
+        var ret = [Filter]()
+        for filter in self.distanceFilters() {
+            ret.append(Filter(dict: filter))
+        }
+        return ret
+    }
+    
     class func getDealFilter() -> [Filter] {
         var ret = [Filter]()
         ret.append(Filter(dict: dealCategoryFilter()))
         return ret
     }
     
-    
+    class func distanceFilters() -> [NSDictionary] {
+        return [["name": "0.3 miles", "code": "482.803"],
+                ["name": "1 mile", "code": "1609.34"],
+                ["name": "5 miles", "code": "8046.72"],
+                ["name": "20 miles", "code": "32186.9"]]
+    }
     
     class func dealCategoryFilter() -> NSDictionary {
         return ["name": "Offering A Deal", "code": false]
