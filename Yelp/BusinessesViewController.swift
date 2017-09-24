@@ -23,6 +23,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         self.searchBar = UISearchBar()
         self.searchBar.sizeToFit()
         self.searchBar.delegate = self
+        self.searchBar.placeholder = "Search For a Restaurant"
         navigationItem.titleView = self.searchBar
         /*
         var filtersButton = navigationItem.rightBarButtonItem as! UIButton

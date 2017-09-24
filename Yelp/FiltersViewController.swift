@@ -137,6 +137,13 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             
         }
     }
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.font = UIFont.systemFont(ofSize: 20)
+        header.textLabel?.text = header.textLabel?.text?.capitalized
+        header.textLabel?.textColor = UIColor.black
+    }
+
 
     func tableView (tableView:UITableView , heightForHeaderInSection section:Int)->Float
     {

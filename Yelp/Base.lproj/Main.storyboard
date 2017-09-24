@@ -161,14 +161,14 @@
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="80" id="ObJ-aR-BCy" customClass="SwitchCell" customModule="Yelp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.333333333333336" width="414" height="80"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="414" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ObJ-aR-BCy" id="TaB-o4-3f9">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Elc-3o-JUA">
-                                                    <rect key="frame" x="15.999999999999996" y="19.999999999999996" width="41.666666666666657" height="39.666666666666657"/>
+                                                    <rect key="frame" x="23" y="19.999999999999996" width="41.666666666666671" height="39.666666666666657"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -182,7 +182,7 @@
                                                 </switch>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Elc-3o-JUA" firstAttribute="leading" secondItem="TaB-o4-3f9" secondAttribute="leadingMargin" constant="8" id="Afj-h8-p46"/>
+                                                <constraint firstItem="Elc-3o-JUA" firstAttribute="leading" secondItem="TaB-o4-3f9" secondAttribute="leadingMargin" constant="15" id="Afj-h8-p46"/>
                                                 <constraint firstItem="gQp-wM-9nJ" firstAttribute="trailing" secondItem="TaB-o4-3f9" secondAttribute="trailingMargin" constant="-8" id="DeN-7d-sjl"/>
                                                 <constraint firstItem="Elc-3o-JUA" firstAttribute="top" secondItem="TaB-o4-3f9" secondAttribute="top" constant="20" id="Dqy-6H-Gev"/>
                                                 <constraint firstItem="gQp-wM-9nJ" firstAttribute="centerY" secondItem="Elc-3o-JUA" secondAttribute="centerY" id="KWu-kA-DOi" customClass="Sw"/>
