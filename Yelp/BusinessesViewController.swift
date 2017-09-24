@@ -15,6 +15,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     var selectedCategories: [Int:Bool]!
     var dealSelected: Bool!
     var distanceSelected: String!
+    var sortSelected: Int!
     
     var searchBar = UISearchBar()
     override func viewDidLoad() {
@@ -91,14 +92,16 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         filtersViewController.switchStates = selectedCategories
         filtersViewController.dealSelected = dealSelected
         filtersViewController.distanceSelected = distanceSelected
+        filtersViewController.sortSelected = self.sortSelected
     }
     
-    func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], selectedCategories:[Int:Bool], deals:Bool, distanceSelected:String) {
+    func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject], selectedCategories:[Int:Bool], deals:Bool, distanceSelected:String?, sortSelected:Int) {
         let categories = filters["categories"] as? [String]
         self.selectedCategories = selectedCategories
         self.dealSelected = deals
         self.distanceSelected = distanceSelected
-        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: deals, distance: distanceSelected) { (businesses: [Business]!, error: Error!) -> Void in
+        self.sortSelected = sortSelected
+        Business.searchWithTerm(term: "Restaurants", sort: sortSelected, categories: categories, deals: deals, distance: distanceSelected) { (businesses: [Business]!, error: Error!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }

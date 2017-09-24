@@ -9,7 +9,7 @@
 import UIKit
 
 @objc protocol FiltersViewControllerDelegate {
-    @objc optional func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject], selectedCategories: [Int:Bool], deals: Bool, distanceSelected: String)
+    @objc optional func filtersViwController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject], selectedCategories: [Int:Bool], deals: Bool, distanceSelected: String, sortSelected: Int)
 }
 
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate {
@@ -20,9 +20,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     var categories: [Filter]!
     var dealFilter: [Filter]!
     var distanceFilters: [Filter]!
+    var sortFilters: [Filter]!
     
     var dealSelected: Bool!
     var distanceSelected: String!
+    var sortSelected: Int!
     var switchStates = [Int:Bool]()
     weak var delegate: FiltersViewControllerDelegate!
     
@@ -38,9 +40,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         categories = Filter.getCategoryFilters()
         dealFilter = Filter.getDealFilter()
         distanceFilters = Filter.getDistanceFilters()
+        sortFilters = Filter.getSortFilters()
         allFilters = [[Filter]]()
         allFilters.append(dealFilter)
         allFilters.append(distanceFilters)
+        allFilters.append(sortFilters)
         allFilters.append(categories)
         filtersTableView.delegate = self
         filtersTableView.dataSource = self
@@ -61,7 +65,15 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             filters["categories"] = selectedCategories as AnyObject
         }
         
-        delegate?.filtersViwController?(filtersViewController: self, didUpdateFilters: filters, selectedCategories: self.switchStates, deals: self.dealSelected!, distanceSelected: self.distanceSelected!)
+        if distanceSelected == nil {
+            self.distanceSelected = ""
+        }
+        
+        if sortSelected == nil {
+            self.sortSelected = -1
+        }
+        
+        delegate?.filtersViwController?(filtersViewController: self, didUpdateFilters: filters, selectedCategories: self.switchStates, deals: self.dealSelected!, distanceSelected: self.distanceSelected!, sortSelected: self.sortSelected!)
         dismiss(animated: true, completion: nil)
     }
 
@@ -91,6 +103,14 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         case 2:
             cell.switchLabel.text = filters[indexPath.row].name
+            let sortMode = self.sortFilters[indexPath.row].code as! YelpSortMode
+            if self.sortSelected != nil && sortMode.rawValue == self.sortSelected {
+                cell.onSwitch.isOn = true
+            } else {
+                cell.onSwitch.isOn = false
+            }
+        case 3:
+            cell.switchLabel.text = filters[indexPath.row].name
             cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
             
         default:
@@ -109,6 +129,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             return "Distance"
         
         case 2:
+            return "Sort By"
+        case 3:
             return "Categories"
             
         default :return ""
@@ -133,6 +155,15 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 self.distanceSelected = ""
             }
         } else if indexPath.section == 2 {
+            if value == true {
+                let sortMode = self.sortFilters[indexPath.row].code as! YelpSortMode
+                self.sortSelected = sortMode.rawValue
+                disableOtherRowsInSection(row: indexPath.row, section: indexPath.section)
+            } else {
+                self.sortSelected = -1
+            }
+        
+        } else if indexPath.section == 3 {
             switchStates[indexPath.row] = value
         }
         print("Filters view controller got the switch event")
@@ -140,10 +171,14 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func disableOtherRowsInSection(row: Int!, section:Int!) {
-        var rowsToDisable = Array(Set([0,1,2,3]).subtracting(Set([row])))
+        let total = stride(from: 0, to:self.allFilters[section].count, by:1)
+        var rowsToDisable = Array(Set(Array(total)).subtracting(Set([row])))
         for row in rowsToDisable {
-            var cell = filtersTableView.cellForRow(at: IndexPath(row:row, section:section)) as! SwitchCell
-            cell.onSwitch.isOn = false
+            var cell = filtersTableView.cellForRow(at: IndexPath(row:row, section:section)) as? SwitchCell
+            if cell != nil {
+                cell?.onSwitch.isOn = false
+            }
+            
         }
     }
     

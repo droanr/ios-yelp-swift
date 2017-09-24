@@ -39,6 +39,14 @@ class Filter: NSObject {
         return ret
     }
     
+    class func getSortFilters() -> [Filter] {
+        var ret = [Filter]()
+        for filter in self.sortFilter() {
+            ret.append(Filter(dict: filter))
+        }
+        return ret
+    }
+    
     class func distanceFilters() -> [NSDictionary] {
         return [["name": "0.3 miles", "code": "482.803"],
                 ["name": "1 mile", "code": "1609.34"],
@@ -48,6 +56,12 @@ class Filter: NSObject {
     
     class func dealCategoryFilter() -> NSDictionary {
         return ["name": "Offering A Deal", "code": false]
+    }
+    
+    class func sortFilter() -> [NSDictionary] {
+        return [["name": "Best Match", "code": YelpSortMode.bestMatched],
+                ["name": "Distance", "code": YelpSortMode.distance],
+                ["name": "Highest Rated", "code": YelpSortMode.highestRated]]
     }
     
     class func yelpCategories() -> [NSDictionary] {
