@@ -47,6 +47,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         Business.searchWithTerm(term: "Restaurants", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
+            self.mapView.removeAnnotations(self.mapView.annotations)
             self.addAnnotationsForBusiness(businesses: self.businesses)
             self.tableView.reloadData()
             if let businesses = businesses {
@@ -188,6 +189,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         self.sortSelected = sortSelected
         Business.searchWithTerm(term: "Restaurants", sort: sortSelected, categories: categories, deals: deals, distance: distanceSelected, offset: nil) { (businesses: [Business]!, error: Error!) -> Void in
             self.businesses = businesses
+            self.mapView.removeAnnotations(self.mapView.annotations)
             self.tableView.reloadData()
             self.addAnnotationsForBusiness(businesses: self.businesses)
         }
