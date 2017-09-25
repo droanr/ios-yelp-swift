@@ -28,6 +28,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     var switchStates = [Int:Bool]()
     var isDistanceMenuShowing = false
     var isSortMenuShowing = false
+    var areCategoriesExpanded = false
     weak var delegate: FiltersViewControllerDelegate!
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -68,6 +69,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 filtersTableView.reloadData()
             } else {
                 isSortMenuShowing = true
+                filtersTableView.reloadData()
+            }
+        } else if indexPath.row == 3 && indexPath.section == 3 {
+            if !areCategoriesExpanded {
+                areCategoriesExpanded = true
                 filtersTableView.reloadData()
             }
         }
@@ -114,6 +120,12 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         case 2:
             if !isSortMenuShowing {
                 return 1
+            } else {
+                return allFilters[section].count
+            }
+        case 3:
+            if !areCategoriesExpanded {
+                return 4
             } else {
                 return allFilters[section].count
             }
@@ -164,9 +176,14 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 cell.onSwitch.isOn = false
             }
         case 3:
-            cell.switchLabel.text = filters[indexPath.row].name
-            cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
-            cell.onSwitch.isHidden = false
+            if indexPath.row == 3 && !areCategoriesExpanded {
+                cell.switchLabel.text = "See All..."
+                cell.onSwitch.isHidden = true
+            } else {
+                cell.switchLabel.text = filters[indexPath.row].name
+                cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
+                cell.onSwitch.isHidden = false
+            }
         default:
             cell.switchLabel.text = "foo"
             cell.onSwitch.isOn = false

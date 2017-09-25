@@ -31,12 +31,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         let mapButton = UIBarButtonItem(title: "Map", style: UIBarButtonItemStyle.plain, target: self, action: #selector(toggleMapView))
         
         navigationItem.rightBarButtonItem = mapButton
-        /*
-        var filtersButton = navigationItem.rightBarButtonItem as! UIButton
-        filtersButton.layer.borderColor = UIColor.white as! CGColor
-        filtersButton.layer.borderWidth = 1.0
-        filtersButton.layer.cornerRadius = 5
-        */
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
