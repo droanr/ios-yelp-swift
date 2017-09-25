@@ -26,7 +26,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         self.searchBar = UISearchBar()
         self.searchBar.sizeToFit()
         self.searchBar.delegate = self
-        self.searchBar.placeholder = "Search For a Restaurant"
+        self.searchBar.placeholder = "Search"
         navigationItem.titleView = self.searchBar
         let mapButton = UIBarButtonItem(title: "Map", style: UIBarButtonItemStyle.plain, target: self, action: #selector(toggleMapView))
         
@@ -133,7 +133,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        Business.searchWithTerm(term: searchText) {(businesses: [Business]!, error: Error!) -> Void in
+        Business.searchWithTerm(term: searchText, sort: self.sortSelected, categories: getSelectedCategories(), deals: self.dealSelected, distance: self.distanceSelected, offset: nil){(businesses: [Business]!, error: Error!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }
