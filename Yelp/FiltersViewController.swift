@@ -58,23 +58,21 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         if indexPath.row == 0 && indexPath.section == 1 {
             if isDistanceMenuShowing {
                 isDistanceMenuShowing = false
-                filtersTableView.reloadData()
             } else {
                 isDistanceMenuShowing = true
-                filtersTableView.reloadData()
             }
+            refreshWithAnimation(section: 1)
         } else if indexPath.row == 0 && indexPath.section == 2 {
             if isSortMenuShowing {
                 isSortMenuShowing = false
-                filtersTableView.reloadData()
             } else {
                 isSortMenuShowing = true
-                filtersTableView.reloadData()
             }
+            refreshWithAnimation(section: 2)
         } else if indexPath.row == 3 && indexPath.section == 3 {
             if !areCategoriesExpanded {
                 areCategoriesExpanded = true
-                filtersTableView.reloadData()
+                refreshWithAnimation(section: indexPath.section-1)
             }
         }
     }
@@ -233,7 +231,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 updateFirstRowText(section: indexPath.section, text: distanceFilters[0].name!)
             }
             isDistanceMenuShowing = false
-            filtersTableView.reloadData()
+            refreshWithAnimation(section: 1)
         } else if indexPath.section == 2 {
             if value == true {
                 let sortMode = self.sortFilters[indexPath.row].code as! YelpSortMode
@@ -245,7 +243,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 updateFirstRowText(section: indexPath.section, text: sortFilters[0].name!)
             }
             isSortMenuShowing = false
-            filtersTableView.reloadData()
+            refreshWithAnimation(section: 2)
         } else if indexPath.section == 3 {
             switchStates[indexPath.row] = value
         }
@@ -265,6 +263,12 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     func updateFirstRowText(section:Int!, text: String!) {
         let cell = filtersTableView.cellForRow(at: IndexPath(row:0, section:section)) as? SwitchCell
         cell?.switchLabel.text = text
+    }
+    
+    func refreshWithAnimation(section: Int!) -> Void {
+        let range = NSMakeRange(section, section)
+        let sections = NSIndexSet(indexesIn: range)
+        self.filtersTableView.reloadSections(sections as IndexSet, with: .automatic)
     }
     
 }
