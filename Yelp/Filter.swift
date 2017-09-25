@@ -63,7 +63,7 @@ class Filter: NSObject {
                 return filter.name!
             }
         }
-        return ""
+        return "None"
     }
     
     class func distanceFilters() -> [NSDictionary] {
